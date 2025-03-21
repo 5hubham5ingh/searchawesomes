@@ -1,11 +1,19 @@
 import { defineConfig } from "vite";
+import { fileURLToPath, URL } from "node:url";
 import preact from "@preact/preset-vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [preact()],
-  build: {
-    outDir: "docs",
+  server: {
+    hmr: {
+      host: "192.168.200.1",
+    },
   },
-  base: "/searchawesome/docs",
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+    },
+  },
+  base: "/searchawesome",
 });
