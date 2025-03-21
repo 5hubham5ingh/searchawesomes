@@ -4,8 +4,10 @@ import "./style.css";
 export function App() {
   return (
     <>
-      <Header />
-      <Search />
+      <div id="top-container">
+        <Header />
+        <Search />
+      </div>
       <SearchResults />
     </>
   );
@@ -15,26 +17,34 @@ function Header() {
   return (
     <header>
       <h1>Search Awesomes</h1>
+      <p>
+        Search from hundreds of awesome lists of tools and resources maintained
+        by numerous awesome contributors.
+      </p>
     </header>
   );
 }
 
 function Search() {
   return (
-    <div id="search">
-      <input type="search" placeholder="Search" />
-      <GitLink />
-    </div>
+      <div id="search">
+        <input type="search" placeholder="Search" />
+        <ProjectLink />
+      </div>
   );
 }
 
 function SearchResults() {
-  return <h1>Search result</h1>;
+  return (
+    <div id="searchResults">
+      {(new Array(300).fill(0)).map((num) => <div className="card">num</div>)}
+    </div>
+  );
 }
 
-function GitLink() {
+function ProjectLink() {
   return (
-    <a href="https://github.com/">
+    <a href="https://github.com/5hubham5ingh/searchawesomes">
       <svg
         viewBox="0 0 20 20"
         version="1.1"
