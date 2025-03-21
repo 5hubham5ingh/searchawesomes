@@ -27,17 +27,25 @@ function Header() {
 
 function Search() {
   return (
-      <div id="search">
-        <input type="search" placeholder="Search" />
-        <ProjectLink />
-      </div>
+    <div id="search">
+      <input type="search" placeholder="Search" />
+      <ProjectLink />
+    </div>
   );
 }
 
 function SearchResults() {
   return (
     <div id="searchResults">
-      {(new Array(300).fill(0)).map((num) => <div className="card">num</div>)}
+      {(new Array(300).fill(0)).map((num, i) => (
+        <fieldset className="card">
+          <legend>Search Result {i + 1}</legend>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
+          officia, dolores vel dicta ratione eum suscipit consequuntur? Harum
+          error quasi est distinctio perferendis, aperiam accusantium
+          consectetur aliquid, eum, libero exercitationem!
+        </fieldset>
+      ))}
     </div>
   );
 }
