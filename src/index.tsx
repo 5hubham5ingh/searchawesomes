@@ -1,5 +1,7 @@
 import { render } from "preact";
 import "./style.css";
+import { useState } from "preact/hooks";
+import awesomeList from "./awesomeList";
 
 export function App() {
   return (
@@ -40,10 +42,30 @@ function Header() {
   );
 }
 
+function useSearchQuery() {
+  const queryParam = new URLSearchParams(location.search).get("q");
+  const [searchQuery, setSearchQuery] = useState(queryParam || "");
+  const handleSearch = (e: Event) => {
+    const query = (e.target as HTMLInputElement).value;
+    setSearchQuery(query);
+    const url = new URL(location.href);
+    if (query.length) url.searchParams.set("q", query);
+    else url.searchParams.delete("q");
+    // history.pushState({}, "", url.toString());
+  };
+  return { searchQuery, handleSearch };
+}
+
 function Search() {
+  const { searchQuery, handleSearch } = useSearchQuery();
   return (
     <div id="search">
-      <input type="search" placeholder="Search" />
+      <input
+        type="text"
+        onInput={handleSearch}
+        placeholder="Search"
+        value={searchQuery}
+      />
       <ProjectLink />
     </div>
   );
@@ -52,15 +74,30 @@ function Search() {
 function SearchResults() {
   return (
     <div id="searchResults">
-      {new Array(300).fill(0).map((num, i) => (
+      {awesomeList.map((resource, i) => (
         <fieldset className="card">
-          <legend>Search Result {i + 1}</legend>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
-          officia, dolores vel dicta ratione eum suscipit consequuntur? Harum
-          error quasi est distinctio perferendis, aperiam accusantium
-          consectetur aliquid, eum, libero exercitationem!
+          <legend>
+            {resource.name}
+            {` [${i}]`}
+          </legend>
+          {resource.description}
+          <CardsButtons resource={resource} />
         </fieldset>
       ))}
+    </div>
+  );
+}
+
+function CardsButtons({ resource }) {
+  return (
+    <div className="cardButtons">
+      {resource.link ? (
+        <a href={resource.link} target="_blank" rel="noreferrer">
+          Explore
+        </a>
+      ) : null}
+      {resource.url ? <button>Explore</button> : null}
+      <button>Bookmark</button>
     </div>
   );
 }

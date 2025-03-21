@@ -1,2 +1,2 @@
-- Button to visit the repo
+- Button to visit the repo or search for resource in the repo
 - Button to bookmark the repo.

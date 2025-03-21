@@ -1,4 +1,4 @@
-:root{
+:root {
   --background: black;
   --foreground: gray;
 }
@@ -18,18 +18,19 @@ body {
     padding-bottom: 1rem;
     position: sticky;
     top: 0;
+	z-index: 1;
 
-	button {
-		position: absolute;
-		top: 1rem;
-		right: 1rem;
-		background-color: var(--background);
-		border: 1px solid var(--foreground);
-		cursor: pointer;
-    padding: 0.5rem 1rem;
-    border-radius: 1rem;
-    color: var(--foreground);
-	}
+    button {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background-color: var(--background);
+      border: 1px solid var(--foreground);
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border-radius: 1rem;
+      color: var(--foreground);
+    }
 
     header {
       display: flex;
@@ -48,14 +49,16 @@ body {
       background-color: rgba(128, 128, 128, 0.498);
       width: 60vw;
       display: flex;
-      border-radius: 2rem;
+      border-radius: 1rem;
       border: 1px solid black;
+      align-items: center;
+      justify-content: space-evenly;
 
       input {
         margin: 1rem;
         background-color: var(--background);
-        width: 80%;
-        padding: 1rem;
+        width: 85%;
+        padding: 0.5rem 1rem;
         border-radius: inherit;
         outline: none;
         border: 1px solid black;
@@ -63,8 +66,9 @@ body {
       }
 
       a {
-        width: 4rem;
-        margin: 0.5rem 0 0.5rem 5%;
+        width: 3rem;
+        margin-right: 1rem;
+		margin-top: 0.3rem;
       }
     }
   }
@@ -82,32 +86,56 @@ body {
       border-radius: 1rem;
       border: 1px solid var(--foreground);
       width: 20rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1rem;
-      font: monospace;
+      position: relative;
+	  padding: 2rem;
 
-      legend{
+      legend {
         padding: 0 0.5rem;
         font-weight: bold;
+		font-size: 1.2rem;
       }
 
-      h2 {
-        margin: 0.5rem;
+      .cardButtons {
+        display: flex;
+        justify-content: space-around;
+		align-items: center;
+        height: 100%;
+        width: 90%;
+        position: absolute;
+        top: 0;
+        background-color: var(--background);
+        opacity: 0;
+		transition: opacity 0.2s ease-in-out;
+		backdrop-filter: blur(50px);
+
+        button {
+          border: none;
+          max-height: 50%;
+          background-color: var(--background);
+          padding: 1rem;
+		  display: flex;
+		  align-items: center;
+		  outline: none;
+		  border-radius: 1rem;
+		  color: var(--foreground);
+		  font-weight: bold;
+        }
+
+		button:focus{
+		  outline: 1px solid var(--foreground);
+		}
+
+		button:hover {
+		  border: 1px solid var(--foreground);
+		}
       }
 
-      p {
-        margin: 0.5rem;
+      &:hover .cardButtons {
+        opacity: 0.9;
       }
 
-      a {
-        margin: 0.5rem;
-        background-color: black;
-        padding: 0.5rem;
-        border-radius: 1rem;
-        text-decoration: none;
-        color: gray;
+      &:focus-within .cardButtons {
+        opacity: 0.9;
       }
     }
   }
