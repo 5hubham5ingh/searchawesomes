@@ -1,6 +1,6 @@
 :root {
   --background: black;
-  --foreground: gray;
+  --foreground: lightgray;
 }
 
 body {
@@ -18,7 +18,7 @@ body {
     padding-bottom: 1rem;
     position: sticky;
     top: 0;
-	z-index: 1;
+    z-index: 1;
 
     button {
       position: absolute;
@@ -46,7 +46,7 @@ body {
     }
 
     #search {
-      background-color: rgba(128, 128, 128, 0.498);
+      background-color: rgba(211, 211, 211, 0.518);
       width: 60vw;
       display: flex;
       border-radius: 1rem;
@@ -68,7 +68,11 @@ body {
       a {
         width: 3rem;
         margin-right: 1rem;
-		margin-top: 0.3rem;
+        margin-top: 0.3rem;
+
+        svg {
+          fill: var(--foreground);
+        }
       }
     }
   }
@@ -87,55 +91,65 @@ body {
       border: 1px solid var(--foreground);
       width: 20rem;
       position: relative;
-	  padding: 2rem;
+      padding: 2rem;
 
       legend {
         padding: 0 0.5rem;
         font-weight: bold;
-		font-size: 1.2rem;
+        font-size: 1.2rem;
       }
 
       .cardButtons {
         display: flex;
         justify-content: space-around;
-		align-items: center;
-        height: 100%;
-        width: 90%;
+        align-items: center;
+        height: 95%;
+        width: 95%;
         position: absolute;
         top: 0;
+        left: 3%;
         background-color: var(--background);
         opacity: 0;
-		transition: opacity 0.2s ease-in-out;
-		backdrop-filter: blur(50px);
+        transition: opacity 0.2s ease-in-out;
+        backdrop-filter: blur(50px);
 
-        button {
+        button, a {
           border: none;
           max-height: 50%;
           background-color: var(--background);
           padding: 1rem;
-		  display: flex;
-		  align-items: center;
-		  outline: none;
-		  border-radius: 1rem;
-		  color: var(--foreground);
-		  font-weight: bold;
+          display: flex;
+          align-items: center;
+          outline: none;
+          border-radius: 1rem;
+          color: var(--foreground);
+          text-decoration: none;
+          font-size: 1rem;
+          position: relative;
+          overflow: hidden;
         }
 
-		button:focus{
-		  outline: 1px solid var(--foreground);
-		}
+        a {
+          font-size: 0.9rem;
+          padding: 0.6rem 1rem;
+        }
 
-		button:hover {
-		  border: 1px solid var(--foreground);
-		}
+        button:focus, a:focus, button:hover, a:hover {
+          outline: 1px solid var(--foreground);
+          border: 1px solid var(--foreground);
+        }
       }
 
       &:hover .cardButtons {
-        opacity: 0.9;
+        opacity: 0.85;
+
+        button {
+          opacity: 1 !important;
+        }
       }
 
       &:focus-within .cardButtons {
-        opacity: 0.9;
+        opacity: 0.85;
       }
     }
   }
