@@ -7,51 +7,44 @@ export type awesomeList = {
   repoName: string;
   branchName: string;
   description: string;
-  readmeParser: string;
 };
 
 const awesomeRepoList: awesomeList[] = [
   {
-    userName: "temp1l",
-    repoName: "temp1",
-    branchName: "main",
-    description: "llorem ipsum dolor sit amet loremlorem ipsum dolor sit amet",
-    readmeParser: "default",
+    userName: "rothgar",
+    repoName: "awesome-tuis",
+    branchName: "master",
+    description: "A curated list of awesome TUI (Text User Interface) libraries and tools.",
   },
   {
     userName: "temp1l",
     repoName: "temp2",
     branchName: "main",
     description: "llorem ipsum dolor sit amet loremlorem ipsum dolor sit amet",
-    readmeParser: "default",
   },
   {
     userName: "temp1l",
     repoName: "temp3",
     branchName: "main",
     description: "llorem ipsum dolor sit amet loremlorem ipsum dolor sit amet",
-    readmeParser: "default",
   },
   {
     userName: "temp1l",
     repoName: "temp4",
     branchName: "main",
     description: "llorem ipsum dolor sit amet loremlorem ipsum dolor sit amet",
-    readmeParser: "default",
   },
   {
     userName: "temp1l",
     repoName: "temp5",
     branchName: "main",
     description: "llorem ipsum dolor sit amet loremlorem ipsum dolor sit amet",
-    readmeParser: "default",
   },
   {
     userName: "temp1l",
     repoName: "temp6",
     branchName: "main",
     description: "llorem ipsum dolor sit amet loremlorem ipsum dolor sit amet",
-    readmeParser: "default",
   },
 ];
 

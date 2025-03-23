@@ -124,7 +124,6 @@ const SearchResults = () => {
         <fieldset className="card" key={i}>
           <legend>
             {resource.repoName}
-            {` [${i}]`}
           </legend>
           {resource.description}
           <CardButtons resource={resource} />
