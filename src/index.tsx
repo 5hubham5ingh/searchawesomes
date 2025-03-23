@@ -99,11 +99,13 @@ const CardButtons = ({ resource }: { resource: fetchedList & awesomeList }) => {
   return (
     <div className="cardButtons">
       {resource.url ? (
-        <a href={resource.url} target="_blank" rel="noreferrer">
+        <button title={`Open ${resource.repoName}`}
+          onClick={() => window.open(resource.url, "_blank", "noreferrer")}
+        >
           Explore
-        </a>
+        </button>
       ) : (
-        <button onClick={handleClick}>Explore</button>
+        <button title={`Search ${resource.repoName}`} onClick={handleClick}>Explore</button>
       )}
       <button>Bookmark</button>
     </div>
@@ -123,13 +125,13 @@ const SearchResults = () => {
 
   const filteredResults = useMemo(() => {
     return searcher.search(state.query)?.slice(0, 10) || [];
-  }, [state.query,state.list]);
+  }, [state.query, state.list]);
 
   console.log("Updating search result...", filteredResults);
   return (
     <div id="searchResults">
       {filteredResults.map((resource: fetchedList & awesomeList, i) => (
-        <fieldset className="card" key={i}>
+        <fieldset className="card" key={`${resource.repoName}${i}`}>
           <legend>{resource.repoName}</legend>
           {resource.description}
           <CardButtons resource={resource} />

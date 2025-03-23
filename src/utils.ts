@@ -1,3 +1,26 @@
+import awesomeList from "./awesomeRepoList.js";
+
+const store = {
+  set: (key: string, value: string) => {
+    try {
+      localStorage.setItem(key, value);
+    } catch (error) {
+      if (
+        error instanceof DOMException &&
+        error.name === "QuotaExceededError"
+      ) {
+        localStorage.clear();
+        try {
+          localStorage.setItem(key, value);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
+  },
+  get: (key: string) => localStorage.getItem(key),
+};
+
 export type fetchedList = {
   repoName: string;
   description: string;
@@ -7,12 +30,13 @@ export type fetchedList = {
 export async function getFetchedList(
   userName: string,
   repoName: string,
-  branchName: string
+  branchName: string,
 ): Promise<fetchedList[]> {
-  const cacheEtag = localStorage.getItem(`${userName}${repoName}-etag`);
-  const cacheData = localStorage.getItem(`${userName}${repoName}-data`);
+  const cacheEtag = store.get(`${userName}${repoName}-etag`);
+  const cacheData = store.get(`${userName}${repoName}-data`);
 
-  const githubRawUrl = `https://api.github.com/repos/${userName}/${repoName}/contents/README.md?ref=${branchName}`;
+  const githubRawUrl =
+    `https://api.github.com/repos/${userName}/${repoName}/contents/README.md?ref=${branchName}`;
 
   const headers = new Headers();
   if (cacheEtag) {
@@ -24,41 +48,34 @@ export async function getFetchedList(
   });
 
   if (response.status === 304 && cacheData) {
-    return parseReadme(`${userName}/${repoName}`, cacheData);
+    return parseReadme(userName, repoName, cacheData);
   }
 
   const etag = response.headers.get("ETag");
-  if (etag) localStorage.setItem(`${userName}${repoName}-etag`, etag);
+  if (etag) store.set(`${userName}${repoName}-etag`, etag);
 
   const resJson = await response.json();
 
   const readmeRes = await fetch(resJson.download_url);
   const readme = await readmeRes.text();
 
-  localStorage.setItem(`${userName}${repoName}-data`, readme);
+  store.set(`${userName}${repoName}-data`, readme);
 
-  const parser = parsers[`${userName}${repoName}`];
-  if (!parser) return defaultParser(readme);
-  const fetchedList = parseReadme(`${userName}/${repoName}`, readme);
+  const fetchedList = parseReadme(userName, repoName, readme);
   return fetchedList;
 }
 
-function parseReadme(parserName = "default", readme: string) {
-  const parser = parsers[parserName];
-  if (!parser) {
-    console.log("Using default parser for ", parserName);
-    return defaultParser(readme);
-  }
-  console.log("Found parser for ", parserName);
-  return parser(readme);
-}
+const parseReadme = (
+  userName: string,
+  repoName: string,
+  readme: string,
+): fetchedList[] => {
+  const regex =
+    awesomeList.find((resource) =>
+      resource.repoName === repoName && resource.userName === userName
+    ).parserRegex;
 
-type readmeParser = (readme: string) => fetchedList[];
-
-const defaultParser: readmeParser = (readme) => {
-  const regex = /- \[([^\]]+)\]\((https:\/\/github\.com\/[^\)]+)\) (.+)/;
-
-  const result = [];
+  const result: fetchedList[] = [];
   readme.split("\n").forEach((line) => {
     const match = line.match(regex);
     if (match) {
@@ -71,25 +88,4 @@ const defaultParser: readmeParser = (readme) => {
   });
 
   return result;
-};
-
-const jaywcjloveAwesomeMac: readmeParser = (readme) => {
-  const regex = /\* \[([^\]]+)\]\(([^)]+)\) - (.+?)(?:[ ]+\[|\n|$)/;
-  const result = [];
-  readme.split("\n").forEach((line) => {
-    const match = line.match(regex);
-    if (match) {
-      result.push({
-        repoName: match[1],
-        url: match[2],
-        description: match[3],
-      });
-    }
-  });
-  return result;
-};
-
-// Repo specific README.md parsers
-const parsers: { [key: string]: readmeParser } = {
-  "jaywcjlove/awesome-mac": jaywcjloveAwesomeMac,
 };

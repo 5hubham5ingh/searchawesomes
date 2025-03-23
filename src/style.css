@@ -129,28 +129,17 @@ body {
           overflow: hidden;
         }
 
-        a {
-          font-size: 0.9rem;
-          padding: 0.6rem 1rem;
-        }
 
-        button:focus, a:focus, button:hover, a:hover {
+        button:focus,  button:hover {
           outline: 1px solid var(--foreground);
           border: 1px solid var(--foreground);
         }
       }
 
-      &:hover .cardButtons {
-        opacity: 0.85;
-
-        button {
-          opacity: 1 !important;
-        }
+      &:hover .cardButtons, &:focus-within .cardButtons {
+        opacity: 0.9;
       }
 
-      &:focus-within .cardButtons {
-        opacity: 0.85;
-      }
     }
   }
 }

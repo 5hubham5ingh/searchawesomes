@@ -1,7 +1,7 @@
 import { createContext } from "preact";
 import { fetchedList, getFetchedList } from "./utils";
 import { useCallback, useContext, useEffect, useState } from "preact/hooks";
-import awesomeRepoListJson from "./awesomeRepoList.json";
+import awesomeRepoListJson from "./awesomeRepoList.js";
 
 export type awesomeList = {
   userName: string;
