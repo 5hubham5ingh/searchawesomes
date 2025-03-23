@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef } from "preact/hooks";
 import "./style.css";
 import { fetchedList, getFetchedList } from "./utils";
 import { awesomeList, AppContext, useAppContext, useAppState } from "./state";
+import FuzzySearch from "fuzzy-search";
 
 const ToggleTheme = () => {
   const toggleTheme = () => {
@@ -112,19 +113,23 @@ const CardButtons = ({ resource }: { resource: fetchedList & awesomeList }) => {
 const SearchResults = () => {
   const { state } = useAppContext();
 
+  const searcher = useMemo(
+    () =>
+      new FuzzySearch(state.list as any, ["repoName", "description"], {
+        sort: true,
+      }),
+    [state.repoName]
+  );
+
   const filteredResults = useMemo(() => {
-    return state.list.filter((resource) =>
-      resource.repoName.toLowerCase().includes(state.query.toLowerCase())
-    );
-  }, [state.list, state.query]);
+    return searcher.search(state.query);
+  }, [state.query]);
 
   return (
     <div id="searchResults">
       {filteredResults.map((resource: fetchedList & awesomeList, i) => (
         <fieldset className="card" key={i}>
-          <legend>
-            {resource.repoName}
-          </legend>
+          <legend>{resource.repoName}</legend>
           {resource.description}
           <CardButtons resource={resource} />
         </fieldset>

@@ -7,6 +7,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/fuzzy-search": "^2.1.5",
+    "fuzzy-search": "^3.2.1",
     "preact": "^10.25.3"
   },
   "devDependencies": {
