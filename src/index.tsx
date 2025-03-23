@@ -1,63 +1,40 @@
-import { createContext, render } from "preact";
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "preact/hooks";
+import { render } from "preact";
+import { useCallback, useEffect, useMemo, useRef } from "preact/hooks";
 import "./style.css";
-import { getResourceList } from "./utils";
-import defaultList, { awesomeList } from "./awesomeList";
-import { fetchedList } from "./utils";
+import { fetchedList, getFetchedList } from "./utils";
+import { awesomeList, AppContext, useAppContext, useAppState } from "./state";
 
-export interface IState {
-  repoName: string;
-  userName: string;
-  branchName: string;
-  query: string;
-  list: awesomeList[] | fetchedList[];
-}
+const ToggleTheme = () => {
+  const toggleTheme = () => {
+    const theme =
+      document.documentElement.getAttribute("data-theme") === "light"
+        ? "dark"
+        : "light";
+    const colors =
+      theme === "light"
+        ? { foreground: "black", background: "lightgray" }
+        : { foreground: "lightgray", background: "black" };
 
-interface AppContextType {
-  state: IState;
-  updateState: (newState: Partial<IState>) => void;
-}
-
-const AppContext = createContext<AppContextType>({
-  state: {
-    repoName: "",
-    userName: "",
-    branchName: "",
-    query: "",
-    list: [],
-  },
-  updateState: () => {},
-});
-
-const useAppContext = () => useContext(AppContext);
-
-const toggleTheme = () => {
-  const theme =
-    document.documentElement.getAttribute("data-theme") === "light"
-      ? "dark"
-      : "light";
-  const colors =
-    theme === "light"
-      ? { foreground: "black", background: "lightgray" }
-      : { foreground: "lightgray", background: "black" };
-
-  document.documentElement.style.setProperty("--foreground", colors.foreground);
-  document.documentElement.style.setProperty("--background", colors.background);
-  document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.style.setProperty(
+      "--foreground",
+      colors.foreground
+    );
+    document.documentElement.style.setProperty(
+      "--background",
+      colors.background
+    );
+    document.documentElement.setAttribute("data-theme", theme);
+  };
+  return (
+    <button onClick={toggleTheme} type="button">
+      Switch Theme
+    </button>
+  );
 };
 
 const Header = () => (
   <header>
-    <button onClick={toggleTheme} type="button">
-      Switch Theme
-    </button>
+    <ToggleTheme />
     <h1>Search Awesomes</h1>
     <p>
       Search from hundreds of awesome lists of tools and resources maintained by
@@ -109,7 +86,7 @@ const CardButtons = ({ resource }: { resource: fetchedList & awesomeList }) => {
   const { state, updateState } = useAppContext();
 
   const handleClick = useCallback(() => {
-    getResourceList(
+    getFetchedList(
       resource.userName,
       resource.repoName,
       resource.branchName
@@ -155,71 +132,6 @@ const SearchResults = () => {
       ))}
     </div>
   );
-};
-
-const useAppState = () => {
-  const params = new URLSearchParams(location.search);
-
-  const initialState: IState = {
-    repoName: params.get("repoName") || "All",
-    userName: params.get("userName") || "",
-    branchName: params.get("branchName") || "",
-    query: "",
-    list: defaultList,
-  };
-
-  const [state, setState] = useState<IState>(initialState);
-
-  useEffect(() => {
-    if (
-      (initialState.repoName !== "All",
-      initialState.repoName !== "",
-      initialState.userName !== "",
-      initialState.branchName !== "")
-    ) {
-      console.log("Fetching list...");
-      getResourceList(state.userName, state.repoName, state.branchName).then(
-        (list) => setState((prevState) => ({ ...prevState, list }))
-      );
-    }
-    const handlePopstate = () => {
-      const newParams = new URLSearchParams(location.search);
-      const newState: IState = {
-        repoName: newParams.get("repoName") || "",
-        userName: newParams.get("userName") || "",
-        branchName: newParams.get("branchName") || "",
-        query: newParams.get("query") || "",
-        list: initialState.list,
-      };
-      setState(newState);
-    };
-
-    window.addEventListener("popstate", handlePopstate);
-
-    return () => {
-      window.removeEventListener("popstate", handlePopstate);
-    };
-  }, []);
-
-  const updateState = useCallback((newState: Partial<IState>) => {
-    setState((prevState) => {
-      const updatedState = { ...prevState, ...newState };
-
-      const url = new URL(location.href);
-
-      ["userName", "branchName", "repoName"].forEach((param) => {
-        const value = updatedState[param as keyof IState] as string;
-        value
-          ? url.searchParams.set(param, value)
-          : url.searchParams.delete(param);
-      });
-
-      history.pushState({}, "", url.toString());
-      return updatedState;
-    });
-  }, []);
-
-  return { state, updateState };
 };
 
 export function App() {

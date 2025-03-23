@@ -1,4 +1,3 @@
-
 export type fetchedList = {
   repoName: string;
   description: string;
@@ -43,10 +42,14 @@ const placeholderList: fetchedList[] = [
   },
 ];
 
-export async function getResourceList(
+export async function getFetchedList(
   userName: string,
   repoName: string,
   branchName: string,
 ): Promise<fetchedList[]> {
   return placeholderList;
 }
+
+const parsers: { [key: string]: (readme: string) => fetchedList[] } = {
+  default: (readme) => placeholderList,
+};
