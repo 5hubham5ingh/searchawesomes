@@ -16,7 +16,6 @@ export async function getFetchedList(
 
   const headers = new Headers();
   if (cacheEtag) {
-    console.log("Cache Etag", cacheEtag);
     headers.append("If-None-Match", cacheEtag);
   }
 
@@ -25,7 +24,7 @@ export async function getFetchedList(
   });
 
   if (response.status === 304 && cacheData) {
-    return parsers[`${userName}${repoName}`](cacheData);
+    return parseReadme(`${userName}/${repoName}`, cacheData);
   }
 
   const etag = response.headers.get("ETag");
@@ -38,12 +37,25 @@ export async function getFetchedList(
 
   localStorage.setItem(`${userName}${repoName}-data`, readme);
 
-  const fetchedList = parsers[`${userName}${repoName}`](readme);
-  console.log(readme,fetchedList)
+  const parser = parsers[`${userName}${repoName}`];
+  if (!parser) return defaultParser(readme);
+  const fetchedList = parseReadme(`${userName}/${repoName}`, readme);
   return fetchedList;
 }
 
-const defaultParser = (readme) => {
+function parseReadme(parserName = "default", readme: string) {
+  const parser = parsers[parserName];
+  if (!parser) {
+    console.log("Using default parser for ", parserName);
+    return defaultParser(readme);
+  }
+  console.log("Found parser for ", parserName);
+  return parser(readme);
+}
+
+type readmeParser = (readme: string) => fetchedList[];
+
+const defaultParser: readmeParser = (readme) => {
   const regex = /- \[([^\]]+)\]\((https:\/\/github\.com\/[^\)]+)\) (.+)/;
 
   const result = [];
@@ -61,6 +73,23 @@ const defaultParser = (readme) => {
   return result;
 };
 
-const parsers: { [key: string]: (readme: string) => fetchedList[] } = {
-  "rothgarawesome-tuis": defaultParser,
+const jaywcjloveAwesomeMac: readmeParser = (readme) => {
+  const regex = /\* \[([^\]]+)\]\(([^)]+)\) - (.+?)(?:[ ]+\[|\n|$)/;
+  const result = [];
+  readme.split("\n").forEach((line) => {
+    const match = line.match(regex);
+    if (match) {
+      result.push({
+        repoName: match[1],
+        url: match[2],
+        description: match[3],
+      });
+    }
+  });
+  return result;
+};
+
+// Repo specific README.md parsers
+const parsers: { [key: string]: readmeParser } = {
+  "jaywcjlove/awesome-mac": jaywcjloveAwesomeMac,
 };

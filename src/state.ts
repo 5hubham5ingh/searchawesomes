@@ -1,6 +1,7 @@
 import { createContext } from "preact";
 import { fetchedList, getFetchedList } from "./utils";
-import { useContext, useCallback, useState, useEffect } from "preact/hooks";
+import { useCallback, useContext, useEffect, useState } from "preact/hooks";
+import awesomeRepoListJson from "./awesomeRepoList.json";
 
 export type awesomeList = {
   userName: string;
@@ -9,44 +10,7 @@ export type awesomeList = {
   description: string;
 };
 
-const awesomeRepoList: awesomeList[] = [
-  {
-    userName: "rothgar",
-    repoName: "awesome-tuis",
-    branchName: "master",
-    description: "A curated list of awesome TUI (Text User Interface) libraries and tools.",
-  },
-  {
-    userName: "temp1l",
-    repoName: "temp2",
-    branchName: "main",
-    description: "llorem ipsum dolor sit amet loremlorem ipsum dolor sit amet",
-  },
-  {
-    userName: "temp1l",
-    repoName: "temp3",
-    branchName: "main",
-    description: "llorem ipsum dolor sit amet loremlorem ipsum dolor sit amet",
-  },
-  {
-    userName: "temp1l",
-    repoName: "temp4",
-    branchName: "main",
-    description: "llorem ipsum dolor sit amet loremlorem ipsum dolor sit amet",
-  },
-  {
-    userName: "temp1l",
-    repoName: "temp5",
-    branchName: "main",
-    description: "llorem ipsum dolor sit amet loremlorem ipsum dolor sit amet",
-  },
-  {
-    userName: "temp1l",
-    repoName: "temp6",
-    branchName: "main",
-    description: "llorem ipsum dolor sit amet loremlorem ipsum dolor sit amet",
-  },
-];
+const awesomeRepoList: awesomeList[] = awesomeRepoListJson;
 
 interface IState {
   repoName: string;
@@ -119,6 +83,7 @@ export const useAppState = () => {
   }, []);
 
   const updateState = useCallback((newState: Partial<IState>) => {
+    console.log("Updating state...", newState);
     setState((prevState) => {
       const updatedState = { ...prevState, ...newState };
 

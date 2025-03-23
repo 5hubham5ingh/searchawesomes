@@ -122,9 +122,10 @@ const SearchResults = () => {
   );
 
   const filteredResults = useMemo(() => {
-    return searcher.search(state.query);
-  }, [state.query]);
+    return searcher.search(state.query)?.slice(0, 10) || [];
+  }, [state.query,state.list]);
 
+  console.log("Updating search result...", filteredResults);
   return (
     <div id="searchResults">
       {filteredResults.map((resource: fetchedList & awesomeList, i) => (
