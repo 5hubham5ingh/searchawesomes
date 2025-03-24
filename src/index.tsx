@@ -1,7 +1,7 @@
 import { render } from "preact";
 import { useCallback, useEffect, useMemo, useRef } from "preact/hooks";
 import "./style.css";
-import { fetchedList, getFetchedList } from "./utils";
+import { fetchedList, getCachedList, getFetchedList } from "./utils";
 import { AppContext, awesomeList, useAppContext, useAppState } from "./state";
 import FuzzySearch from "fuzzy-search";
 
@@ -185,15 +185,27 @@ const CardButtons = ({ resource }: { resource: fetchedList & awesomeList }) => {
       resource.repoName,
       resource.branchName
     ).then((list) => {
+      if (list)
+        updateState({
+          userName: resource.userName,
+          repoName: resource.repoName,
+          branchName: resource.branchName,
+          description: resource.description,
+          list,
+          query: "",
+        });
+    });
+    const cachedList = getCachedList(resource.userName, resource.repoName);
+    if (cachedList) {
       updateState({
         userName: resource.userName,
         repoName: resource.repoName,
         branchName: resource.branchName,
         description: resource.description,
-        list,
+        list: cachedList,
         query: "",
       });
-    });
+    }
   }, [resource.repoName, state, updateState]);
 
   return (

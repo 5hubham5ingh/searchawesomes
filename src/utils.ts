@@ -1,4 +1,4 @@
-import awesomeList from "./awesomeRepoList.js";
+import awesomeList from "./awesomeRepoList";
 
 const store = {
   set: (key: string, value: string) => {
@@ -29,11 +29,20 @@ export type fetchedList = {
   url: string;
 };
 
+export function getCachedList(
+  userName: string,
+  repoName: string,
+) {
+  const cacheData = store.get(`${userName}${repoName}-data`);
+  if (!cacheData) return;
+  return parseReadme(userName, repoName, cacheData);
+}
+
 export async function getFetchedList(
   userName: string,
   repoName: string,
   branchName: string,
-): Promise<fetchedList[]> {
+): Promise<fetchedList[] | undefined> {
   const cacheEtag = store.get(`${userName}${repoName}-etag`);
   const cacheData = store.get(`${userName}${repoName}-data`);
 
@@ -50,7 +59,7 @@ export async function getFetchedList(
   });
 
   if (response.status === 304 && cacheData) {
-    return parseReadme(userName, repoName, cacheData);
+    return;
   }
 
   const etag = response.headers.get("ETag");

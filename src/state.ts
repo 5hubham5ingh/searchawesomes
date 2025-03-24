@@ -1,7 +1,7 @@
 import { createContext } from "preact";
-import { fetchedList, getFetchedList } from "./utils";
+import { fetchedList, getCachedList, getFetchedList } from "./utils";
 import { useCallback, useContext, useEffect, useState } from "preact/hooks";
-import awesomeRepoListJson from "./awesomeRepoList.js";
+import awesomeRepoListJson from "./awesomeRepoList";
 
 export type awesomeList = {
   userName: string;
@@ -69,12 +69,24 @@ export const useAppState = () => {
       currentState.userName,
       currentState.branchName)
     ) {
-      console.log("Fetching query specified repo list...");
       getFetchedList(
         currentState.userName,
         currentState.repoName,
         currentState.branchName
-      ).then((list) => updateState({ ...currentState, list }));
+      ).then((list) => {
+        if (list) {
+          console.log("Fetched list...", list);
+          updateState({ ...currentState, list });
+        }
+      });
+      const cacheData = getCachedList(
+        currentState.userName,
+        currentState.repoName
+      );
+      if (cacheData) {
+        console.log("Cached list...", cacheData);
+        updateState({ ...currentState, list: cacheData });
+      }
     }
 
     window.addEventListener("popstate", resetState);
