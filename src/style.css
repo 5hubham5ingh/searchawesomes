@@ -20,16 +20,12 @@ body {
     top: 0;
     z-index: 1;
 
-    button {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background-color: var(--background);
-      border: 1px solid var(--foreground);
+    #logo {
+      width: 5rem;
+      height: 5rem;
       cursor: pointer;
-      padding: 0.5rem 1rem;
-      border-radius: 1rem;
-      color: var(--foreground);
+      margin-bottom: -1rem;
+      margin-top: 1rem;
     }
 
     header {
