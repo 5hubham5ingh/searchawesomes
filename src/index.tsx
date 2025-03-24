@@ -92,7 +92,7 @@ const CardButtons = ({ resource }: { resource: fetchedList & awesomeList }) => {
       resource.repoName,
       resource.branchName
     ).then((list) => {
-      updateState({ ...state, repoName: resource.repoName, list, query: "" });
+      updateState({  userName: resource.userName, repoName: resource.repoName, branchName: resource.branchName, list, query: "" });
     });
   }, [resource.repoName, state, updateState]);
 
@@ -115,6 +115,7 @@ const CardButtons = ({ resource }: { resource: fetchedList & awesomeList }) => {
 const SearchResults = () => {
   const { state } = useAppContext();
 
+  console.log("Initial state...", state);
   const searcher = useMemo(
     () =>
       new FuzzySearch(state.list as any, ["repoName", "description"], {
@@ -124,7 +125,7 @@ const SearchResults = () => {
   );
 
   const filteredResults = useMemo(() => {
-    return searcher.search(state.query)?.slice(0, 10) || [];
+    return searcher.search(state.query)?.slice(0, 11) || [];
   }, [state.query, state.list]);
 
   console.log("Updating search result...", filteredResults);

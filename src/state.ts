@@ -42,9 +42,9 @@ export const useAppState = () => {
   const params = new URLSearchParams(location.search);
 
   const initialState: IState = {
-    repoName: params.get("repoName") || "All",
-    userName: params.get("userName") || "",
-    branchName: params.get("branchName") || "",
+    repoName: "All",
+    userName: "",
+    branchName: "",
     query: "",
     list: awesomeRepoList,
   };
@@ -52,16 +52,24 @@ export const useAppState = () => {
   const [state, setState] = useState<IState>(initialState);
 
   useEffect(() => {
+    const currentState: Partial<IState> = {
+      repoName: params.get("repoName"),
+      userName: params.get("userName"),
+      branchName: params.get("branchName"),
+      query: params.get("query"),
+    };
     if (
-      (initialState.repoName !== "All",
-        initialState.repoName !== "",
-        initialState.userName !== "",
-        initialState.branchName !== "")
+      (currentState.repoName !== "All",
+      currentState.repoName,
+      currentState.userName,
+      currentState.branchName)
     ) {
-      console.log("Fetching list...");
-      getFetchedList(state.userName, state.repoName, state.branchName).then(
-        (list) => setState((prevState) => ({ ...prevState, list })),
-      );
+      console.log("Fetching query specified repo list...");
+      getFetchedList(
+        currentState.userName,
+        currentState.repoName,
+        currentState.branchName
+      ).then((list) => updateState({ ...currentState, list }));
     }
     const handlePopstate = () => {
       const newParams = new URLSearchParams(location.search);

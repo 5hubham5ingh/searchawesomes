@@ -9,10 +9,12 @@ const store = {
         error instanceof DOMException &&
         error.name === "QuotaExceededError"
       ) {
+        //TODO: Preserve custome css and bookmark data
         localStorage.clear();
         try {
           localStorage.setItem(key, value);
         } catch (error) {
+          //TODO: Notify user to delete some bookmark or custome css
           console.error(error);
         }
       }
