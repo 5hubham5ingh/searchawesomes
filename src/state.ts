@@ -24,6 +24,7 @@ interface IState {
 interface AppContextType {
   state: IState;
   updateState: (newState: Partial<IState>) => void;
+  resetState: () => void;
 }
 
 export const AppContext = createContext<AppContextType>({
@@ -36,6 +37,7 @@ export const AppContext = createContext<AppContextType>({
     list: [],
   },
   updateState: () => {},
+  resetState: () => {},
 });
 
 export const useAppContext = () => useContext(AppContext);
@@ -63,33 +65,22 @@ export const useAppState = () => {
     };
     if (
       (currentState.repoName !== "All",
-        currentState.repoName,
-        currentState.userName,
-        currentState.branchName)
+      currentState.repoName,
+      currentState.userName,
+      currentState.branchName)
     ) {
       console.log("Fetching query specified repo list...");
       getFetchedList(
         currentState.userName,
         currentState.repoName,
-        currentState.branchName,
+        currentState.branchName
       ).then((list) => updateState({ ...currentState, list }));
     }
-    const handlePopstate = () => {
-      const newParams = new URLSearchParams(location.search);
-      const newState: IState = {
-        repoName: newParams.get("repoName") || "",
-        userName: newParams.get("userName") || "",
-        branchName: newParams.get("branchName") || "",
-        query: newParams.get("query") || "",
-        list: initialState.list,
-      };
-      setState(newState);
-    };
 
-    window.addEventListener("popstate", handlePopstate);
+    window.addEventListener("popstate", resetState);
 
     return () => {
-      window.removeEventListener("popstate", handlePopstate);
+      window.removeEventListener("popstate", resetState);
     };
   }, []);
 
@@ -112,5 +103,9 @@ export const useAppState = () => {
     });
   }, []);
 
-  return { state, updateState };
+  const resetState = () => {
+    updateState(initialState);
+  };
+
+  return { state, updateState, resetState };
 };
