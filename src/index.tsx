@@ -1,5 +1,5 @@
 import { render } from "preact";
-import { useCallback, useEffect, useMemo, useRef } from "preact/hooks";
+import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import "./style.css";
 import { fetchedList, getCachedList, getFetchedList } from "./utils";
 import { AppContext, awesomeList, useAppContext, useAppState } from "./state";
@@ -182,6 +182,40 @@ const ProjectLink = () => (
   </a>
 );
 
+const AddOrRemoveBookmark = ({ resource }) => {
+  const bookmarks = localStorage.getItem("bookmarks");
+  const parsedBookmarks = bookmarks && JSON.parse(bookmarks);
+  const [isBookmarked, setBookmark] = useState(parsedBookmarks?.some(
+    (bookmark) =>
+      bookmark.repoName === resource.repoName &&
+      bookmark.userName === resource.userName
+  ));
+  const addToBookmarks = useCallback(() => {
+    const updatedBookmarks = [...(parsedBookmarks || []), resource];
+    localStorage.setItem(
+      "bookmarks",
+      JSON.stringify(updatedBookmarks)
+    );
+    setBookmark(true);
+  }, [resource]);
+
+  const removeBookmark = useCallback(() => {
+    const newBookmarks = parsedBookmarks.filter(
+      (bookmark) =>
+        bookmark.repoName !== resource.repoName ||
+        bookmark.userName !== resource.userName
+    );
+    localStorage.setItem("bookmarks", JSON.stringify(newBookmarks));
+    setBookmark(false);
+  }, [resource]);
+
+  return isBookmarked ? (
+    <button onClick={removeBookmark}>Remove Bookmark</button>
+  ) : (
+    <button onClick={addToBookmarks}>Bookmark</button>
+  );
+};
+
 const CardButtons = ({ resource }: { resource: fetchedList & awesomeList }) => {
   const { state, updateState } = useAppContext();
   const { notify } = useNotification();
@@ -193,7 +227,10 @@ const CardButtons = ({ resource }: { resource: fetchedList & awesomeList }) => {
       resource.branchName
     ).then((list) => {
       if (list) {
-        notify(`Fetching ${resource.repoName}...`, NotificationType.Info);
+        notify(
+          `Fetched "${resource.repoName}" from API...`,
+          NotificationType.Info
+        );
         updateState({
           userName: resource.userName,
           repoName: resource.repoName,
@@ -206,7 +243,10 @@ const CardButtons = ({ resource }: { resource: fetchedList & awesomeList }) => {
     });
     const cachedList = getCachedList(resource.userName, resource.repoName);
     if (cachedList) {
-      notify(`Loading ${resource.repoName} from cache...`, NotificationType.Info);
+      notify(
+        `Loaded "${resource.repoName}" from cache...`,
+        NotificationType.Info
+      );
       updateState({
         userName: resource.userName,
         repoName: resource.repoName,
@@ -232,7 +272,7 @@ const CardButtons = ({ resource }: { resource: fetchedList & awesomeList }) => {
           Explore
         </button>
       )}
-      <button>Bookmark</button>
+      <AddOrRemoveBookmark resource={resource} />
     </div>
   );
 };

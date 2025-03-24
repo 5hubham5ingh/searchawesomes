@@ -134,10 +134,11 @@ body {
 
     .card {
       background-color: var(--background);
-      margin: 1rem;
+      margin: 0.7rem 1rem;
       border-radius: 1rem;
       border: 1px solid var(--foreground);
-      width: 20rem;
+      max-width: 25rem;
+      min-width: 15rem;
       position: relative;
       padding: 2rem;
 
