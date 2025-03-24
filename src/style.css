@@ -20,12 +20,39 @@ body {
     top: 0;
     z-index: 1;
 
-    #logo {
-      width: 5rem;
-      height: 5rem;
-      cursor: pointer;
-      margin-bottom: -1rem;
-      margin-top: 1rem;
+    #quickActions {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 6rem;
+      align-items: center;
+      top: 0.5rem;
+      position: absolute;
+      right: 1rem;
+
+      #logo {
+        width: 1.7rem;
+        height: 1.7rem;
+      }
+
+      #toggleTheme {
+        height: 1.5rem;
+        width: 1.5rem;
+      }
+
+      #openBookmark {
+        width: 1.7rem;
+        height: 1.7rem;
+      }
+
+      button {
+        border: none;
+        background: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
     }
 
     header {
@@ -125,8 +152,7 @@ body {
           overflow: hidden;
         }
 
-
-        button:focus,  button:hover {
+        button:focus, button:hover {
           outline: 1px solid var(--foreground);
           border: 1px solid var(--foreground);
         }
@@ -135,7 +161,6 @@ body {
       &:hover .cardButtons, &:focus-within .cardButtons {
         opacity: 0.9;
       }
-
     }
   }
 }

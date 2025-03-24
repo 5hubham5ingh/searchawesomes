@@ -16,6 +16,7 @@ interface IState {
   repoName: string;
   userName: string;
   branchName: string;
+  description?: string;
   query: string;
   list: awesomeList[] | fetchedList[];
 }
@@ -30,6 +31,7 @@ export const AppContext = createContext<AppContextType>({
     repoName: "",
     userName: "",
     branchName: "",
+    description: "",
     query: "",
     list: [],
   },
@@ -45,6 +47,7 @@ export const useAppState = () => {
     repoName: "All",
     userName: "",
     branchName: "",
+    description: "",
     query: "",
     list: awesomeRepoList,
   };
@@ -60,15 +63,15 @@ export const useAppState = () => {
     };
     if (
       (currentState.repoName !== "All",
-      currentState.repoName,
-      currentState.userName,
-      currentState.branchName)
+        currentState.repoName,
+        currentState.userName,
+        currentState.branchName)
     ) {
       console.log("Fetching query specified repo list...");
       getFetchedList(
         currentState.userName,
         currentState.repoName,
-        currentState.branchName
+        currentState.branchName,
       ).then((list) => updateState({ ...currentState, list }));
     }
     const handlePopstate = () => {

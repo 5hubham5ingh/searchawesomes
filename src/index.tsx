@@ -2,7 +2,7 @@ import { render } from "preact";
 import { useCallback, useEffect, useMemo, useRef } from "preact/hooks";
 import "./style.css";
 import { fetchedList, getFetchedList } from "./utils";
-import { awesomeList, AppContext, useAppContext, useAppState } from "./state";
+import { AppContext, awesomeList, useAppContext, useAppState } from "./state";
 import FuzzySearch from "fuzzy-search";
 
 const ToggleTheme = () => {
@@ -11,47 +11,48 @@ const ToggleTheme = () => {
       document.documentElement.getAttribute("data-theme") === "light"
         ? "dark"
         : "light";
-    const colors =
-      theme === "light"
-        ? { foreground: "black", background: "lightgray" }
-        : { foreground: "lightgray", background: "black" };
+    const colors = theme === "light"
+      ? { foreground: "black", background: "lightgray" }
+      : { foreground: "lightgray", background: "black" };
 
     document.documentElement.style.setProperty(
       "--foreground",
-      colors.foreground
+      colors.foreground,
     );
     document.documentElement.style.setProperty(
       "--background",
-      colors.background
+      colors.background,
     );
     document.documentElement.setAttribute("data-theme", theme);
   };
   return (
-    <button onClick={toggleTheme} type="button">
-      Switch Theme
+    <button id={"toggleTheme"} onClick={toggleTheme} title={"Toggle Theme"}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 -960 960 960"
+        fill="var(--foreground)"
+      >
+        <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm40-83q119-15 199.5-104.5T800-480q0-123-80.5-212.5T520-797v634Z" />
+      </svg>
     </button>
   );
 };
 
 const Logo = () => {
   return (
-    <svg
-      id={"logo"}
-      version="1.0"
-      xmlns="http://www.w3.org/2000/svg"
-      width="788.000000pt"
-      height="539.000000pt"
-      viewBox="0 0 788.000000 539.000000"
-      preserveAspectRatio="xMidYMid meet"
-      href={"/"}
-    >
-      <g
-        transform="translate(0.000000,539.000000) scale(0.100000,-0.100000)"
-        fill="var(--foreground)"
-        stroke="none"
+    <button id={"logo"} title="Home">
+      <svg
+        version="1.0"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 788.000000 539.000000"
+        preserveAspectRatio="xMidYMid meet"
       >
-        <path
-          d="M1949 5179 c-306 -32 -627 -144 -860 -301 -114 -76 -294 -253 -366
+        <g
+          transform="translate(0.000000,539.000000) scale(0.100000,-0.100000)"
+          fill="var(--foreground)"
+          stroke="none"
+        >
+          <path d="M1949 5179 c-306 -32 -627 -144 -860 -301 -114 -76 -294 -253 -366
 -358 -161 -238 -227 -466 -227 -790 0 -622 252 -963 928 -1262 108 -48 527
 -188 786 -263 236 -69 340 -106 465 -165 214 -101 323 -222 361 -399 53 -249
 -57 -472 -289 -586 -369 -180 -930 -118 -1384 153 -120 72 -321 222 -410 306
@@ -70,27 +71,47 @@ l-71 66 -160 -212 c-88 -117 -206 -273 -262 -346 l-103 -134 54 -55 c322 -330
 -112 55 -145 77 -202 133 -99 97 -132 171 -137 307 -3 83 0 115 17 170 56 187
 199 305 446 369 124 32 359 43 509 25 326 -41 636 -182 931 -422 l71 -57 91
 137 c50 75 159 234 243 354 l152 219 -33 29 c-307 265 -729 471 -1142 554
--204 41 -515 56 -718 34z"
-        />
-      </g>
-    </svg>
+-204 41 -515 56 -718 34z" />
+        </g>
+      </svg>
+    </button>
   );
 };
+
+const OpenBookmark = () => {
+  return (
+    <button title={"Open Bookmarks"} id={"openBookmark"}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 -960 960 960"
+        fill="var(--foreground)"
+      >
+        <path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Zm80-122 200-86 200 86v-518H280v518Zm0-518h400-400Z" />
+      </svg>
+    </button>
+  );
+};
+
 const Header = () => {
   const { state } = useAppContext();
-  const isHome = state.repoName === "All" && state.userName === "";
-  const heading = isHome ? "Search Awesomes" : state.repoName.split("-").map(word => `${word[0].toUpperCase()}${word.slice(1)}`).join(" ");
+  const isHome = state.repoName === "All" || state.repoName === "";
+  const heading = isHome ? "Search Awesomes" : state.repoName
+    .split("-")
+    .map((word) => `${word[0].toUpperCase()}${word.slice(1)}`)
+    .join(" ");
   return (
     <header>
-      {/* <ToggleTheme /> */}
-      {!isHome ? <Logo /> : null}
-      {isHome ? <h1>{heading}</h1> : <h2>{heading}</h2>}
-      {isHome ? (
-        <p>
-          Search from hundreds of awesome lists of tools and resources
-          maintained by numerous awesome contributors.
-        </p>
-      ) : null}
+      <div id={"quickActions"}>
+        <Logo />
+        <OpenBookmark />
+        <ToggleTheme />
+      </div>
+      <h1>{heading}</h1>
+      <p>
+        {isHome
+          ? "Search from hundreds of awesome lists of tools and resources maintained by numerous awesome contributors."
+          : state.description}
+      </p>
     </header>
   );
 };
@@ -104,7 +125,7 @@ const Search = () => {
       const query = (e.target as HTMLInputElement).value;
       updateState({ ...state, query });
     },
-    [state, updateState]
+    [state, updateState],
   );
 
   useEffect(() => {
@@ -127,7 +148,8 @@ const ProjectLink = () => (
     <svg viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg">
       <g transform="translate(-140.000000, -7559.000000)" fill="black">
         <g transform="translate(56.000000, 160.000000)">
-          <path d="M94,7399 C99.523,7399 104,7403.59 104,7409.253 C104,7413.782 101.138,7417.624 97.167,7418.981 C96.66,7419.082 96.48,7418.762 96.48,7418.489 C96.48,7418.151 96.492,7417.047 96.492,7415.675 C96.492,7414.719 96.172,7414.095 95.813,7413.777 C98.04,7413.523 100.38,7412.656 100.38,7408.718 C100.38,7407.598 99.992,7406.684 99.35,7405.966 C99.454,7405.707 99.797,7404.664 99.252,7403.252 C99.252,7403.252 98.414,7402.977 96.505,7404.303 C95.706,7404.076 94.85,7403.962 94,7403.958 C93.15,7403.962 92.295,7404.076 91.497,7404.303 C89.586,7402.977 88.746,7403.252 88.746,7403.252 C88.203,7404.664 88.546,7405.707 88.649,7405.966 C88.01,7406.684 87.619,7407.598 87.619,7408.718 C87.619,7412.646 89.954,7413.526 92.175,7413.785 C91.889,7414.041 91.63,7414.493 91.54,7415.156 C90.97,7415.418 89.522,7415.871 88.63,7414.304 C88.63,7414.304 88.101,7413.319 87.097,7413.247 C87.097,7413.247 86.122,7413.234 87.029,7413.87 C87.029,7413.87 87.684,7414.185 88.139,7415.37 C88.139,7415.37 88.726,7417.2 91.508,7416.58 C91.513,7417.437 91.522,7418.245 91.522,7418.489 C91.522,7418.76 91.338,7419.077 90.839,7418.982 C86.865,7417.627 84,7413.783 84,7409.253 C84,7403.59 88.478,7399 94,7399"></path>
+          <path d="M94,7399 C99.523,7399 104,7403.59 104,7409.253 C104,7413.782 101.138,7417.624 97.167,7418.981 C96.66,7419.082 96.48,7418.762 96.48,7418.489 C96.48,7418.151 96.492,7417.047 96.492,7415.675 C96.492,7414.719 96.172,7414.095 95.813,7413.777 C98.04,7413.523 100.38,7412.656 100.38,7408.718 C100.38,7407.598 99.992,7406.684 99.35,7405.966 C99.454,7405.707 99.797,7404.664 99.252,7403.252 C99.252,7403.252 98.414,7402.977 96.505,7404.303 C95.706,7404.076 94.85,7403.962 94,7403.958 C93.15,7403.962 92.295,7404.076 91.497,7404.303 C89.586,7402.977 88.746,7403.252 88.746,7403.252 C88.203,7404.664 88.546,7405.707 88.649,7405.966 C88.01,7406.684 87.619,7407.598 87.619,7408.718 C87.619,7412.646 89.954,7413.526 92.175,7413.785 C91.889,7414.041 91.63,7414.493 91.54,7415.156 C90.97,7415.418 89.522,7415.871 88.63,7414.304 C88.63,7414.304 88.101,7413.319 87.097,7413.247 C87.097,7413.247 86.122,7413.234 87.029,7413.87 C87.029,7413.87 87.684,7414.185 88.139,7415.37 C88.139,7415.37 88.726,7417.2 91.508,7416.58 C91.513,7417.437 91.522,7418.245 91.522,7418.489 C91.522,7418.76 91.338,7419.077 90.839,7418.982 C86.865,7417.627 84,7413.783 84,7409.253 C84,7403.59 88.478,7399 94,7399">
+          </path>
         </g>
       </g>
     </svg>
@@ -141,12 +163,13 @@ const CardButtons = ({ resource }: { resource: fetchedList & awesomeList }) => {
     getFetchedList(
       resource.userName,
       resource.repoName,
-      resource.branchName
+      resource.branchName,
     ).then((list) => {
       updateState({
         userName: resource.userName,
         repoName: resource.repoName,
         branchName: resource.branchName,
+        description: resource.description,
         list,
         query: "",
       });
@@ -155,18 +178,20 @@ const CardButtons = ({ resource }: { resource: fetchedList & awesomeList }) => {
 
   return (
     <div className="cardButtons">
-      {resource.url ? (
-        <button
-          title={`Open ${resource.repoName}`}
-          onClick={() => window.open(resource.url, "_blank", "noreferrer")}
-        >
-          Explore
-        </button>
-      ) : (
-        <button title={`Search ${resource.repoName}`} onClick={handleClick}>
-          Explore
-        </button>
-      )}
+      {resource.url
+        ? (
+          <button
+            title={`Open ${resource.repoName}`}
+            onClick={() => window.open(resource.url, "_blank", "noreferrer")}
+          >
+            Explore
+          </button>
+        )
+        : (
+          <button title={`Search ${resource.repoName}`} onClick={handleClick}>
+            Explore
+          </button>
+        )}
       <button>Bookmark</button>
     </div>
   );
@@ -181,7 +206,7 @@ const SearchResults = () => {
       new FuzzySearch(state.list as any, ["repoName", "description"], {
         sort: true,
       }),
-    [state.repoName]
+    [state.repoName],
   );
 
   const filteredResults = useMemo(() => {
