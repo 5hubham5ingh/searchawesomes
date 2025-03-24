@@ -24,7 +24,7 @@ body {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      height: 6rem;
+      height: 8rem;
       align-items: center;
       top: 0.5rem;
       position: absolute;
@@ -43,6 +43,11 @@ body {
       #openBookmark {
         width: 1.7rem;
         height: 1.7rem;
+      }
+
+      #openSetting{
+        width: 1.5rem;
+        height: 1.5rem;
       }
 
       button {
