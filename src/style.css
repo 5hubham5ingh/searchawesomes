@@ -8,6 +8,26 @@ body {
   color: var(--foreground);
   background-color: var(--background);
 
+  #notifications{
+    position: fixed;
+    top: 1rem;
+    left: 2rem;
+    width: 15rem;
+    height: fit-content;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .notification{
+      background-color: var(--foreground);
+      color: var(--background);
+      padding: 1rem;
+      border-radius: 1rem;
+    }
+  }
+
   #top-container {
     display: flex;
     flex-direction: column;

@@ -4,6 +4,12 @@ import "./style.css";
 import { fetchedList, getCachedList, getFetchedList } from "./utils";
 import { AppContext, awesomeList, useAppContext, useAppState } from "./state";
 import FuzzySearch from "fuzzy-search";
+import {
+  Notification,
+  NotificationProvider,
+  NotificationType,
+  useNotification,
+} from "./notification";
 
 const ToggleTheme = () => {
   const toggleTheme = () => {
@@ -178,6 +184,7 @@ const ProjectLink = () => (
 
 const CardButtons = ({ resource }: { resource: fetchedList & awesomeList }) => {
   const { state, updateState } = useAppContext();
+  const { notify } = useNotification();
 
   const handleClick = useCallback(() => {
     getFetchedList(
@@ -185,7 +192,8 @@ const CardButtons = ({ resource }: { resource: fetchedList & awesomeList }) => {
       resource.repoName,
       resource.branchName
     ).then((list) => {
-      if (list)
+      if (list) {
+        notify(`Fetching ${resource.repoName}...`, NotificationType.Info);
         updateState({
           userName: resource.userName,
           repoName: resource.repoName,
@@ -194,9 +202,11 @@ const CardButtons = ({ resource }: { resource: fetchedList & awesomeList }) => {
           list,
           query: "",
         });
+      }
     });
     const cachedList = getCachedList(resource.userName, resource.repoName);
     if (cachedList) {
+      notify(`Loading ${resource.repoName} from cache...`, NotificationType.Info);
       updateState({
         userName: resource.userName,
         repoName: resource.repoName,
@@ -260,16 +270,19 @@ const SearchResults = () => {
 function App() {
   const appContext = useAppState();
   return (
-    <AppContext.Provider value={appContext}>
-      <div id="top-container">
-        <Header />
-        <div id="search">
-          <Search />
-          <ProjectLink />
+    <NotificationProvider>
+      <Notification />
+      <AppContext.Provider value={appContext}>
+        <div id="top-container">
+          <Header />
+          <div id="search">
+            <Search />
+            <ProjectLink />
+          </div>
         </div>
-      </div>
-      <SearchResults />
-    </AppContext.Provider>
+        <SearchResults />
+      </AppContext.Provider>
+    </NotificationProvider>
   );
 }
 
