@@ -95,10 +95,10 @@ l-71 66 -160 -212 c-88 -117 -206 -273 -262 -346 l-103 -134 54 -55 c322 -330
 };
 
 const OpenBookmark = () => {
-  const {notify} = useNotification();
+  const { notify } = useNotification();
   const { state, updateState, resetState } = useAppContext();
   const toggleBookmarkWindow = () => {
-    console.log("Toggle bookmarks.")
+    console.log("Toggle bookmarks.");
     if (state.repoName === "Bookmarks") {
       resetState();
     } else {
@@ -110,7 +110,7 @@ const OpenBookmark = () => {
           description: "Your favorite repositories.",
           list: bookmarks,
         });
-      }else notify("No bookmark exists.",NotificationType.Error)
+      } else notify("No bookmark exists.", NotificationType.Error);
     }
   };
   return (
@@ -221,6 +221,8 @@ const AddOrRemoveBookmark = ({ resource }) => {
     )
   );
   const addToBookmarks = useCallback(() => {
+    const bookmarks = localStorage.getItem("bookmarks");
+    const parsedBookmarks = bookmarks && JSON.parse(bookmarks);
     const updatedBookmarks = [...(parsedBookmarks || []), resource];
     localStorage.setItem("bookmarks", JSON.stringify(updatedBookmarks));
     setBookmark(true);
