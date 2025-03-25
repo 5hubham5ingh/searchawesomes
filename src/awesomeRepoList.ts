@@ -20,7 +20,7 @@ export default [
     repoName: "awesome-mac",
     branchName: "master",
     description:
-      "The largest Awesome Curated list of command line programs (CLI/TUI).",
+      "An actively maintained list of awesome MacOs softwares and tools.",
     parserRegex: /\* \[([^\]]+)\]\(([^)]+)\) - (.+?)(?:[ ]+\[|\n|$)/,
   },
 ] as {
