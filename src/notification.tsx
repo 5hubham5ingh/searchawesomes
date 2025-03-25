@@ -1,5 +1,5 @@
-import { createContext } from 'preact';
-import { useState, useContext } from 'preact/hooks';
+import { createContext } from "preact";
+import { useContext, useState } from "preact/hooks";
 
 export enum NotificationType {
   Info,
@@ -27,19 +27,23 @@ export const NotificationContext = createContext<NotificationContextType>({
 });
 
 // Provider component
-export function NotificationProvider({ children }: { children: preact.ComponentChildren }) {
+export function NotificationProvider(
+  { children }: { children: preact.ComponentChildren },
+) {
   const [queue, setQueue] = useState<Notification[]>([]);
-  
+
   const addNotification = (message: string, type: NotificationType) => {
     setQueue((prev) => [...prev, { message, type }]);
-    
+
     setTimeout(() => {
       setQueue((prev) => prev.slice(1));
     }, 5000);
   };
-  
+
   return (
-    <NotificationContext.Provider value={{ notifications: queue, notify: addNotification }}>
+    <NotificationContext.Provider
+      value={{ notifications: queue, notify: addNotification }}
+    >
       {children}
     </NotificationContext.Provider>
   );
@@ -53,12 +57,12 @@ export function useNotification() {
 // Notification display component
 export function Notification() {
   const { notifications } = useNotification();
-  
+
   const notificationsJSX = notifications.map((notification, index) => (
     <div key={index} className="notification">
-      {NotificationType[notification.type]}: {notification.message}
+      <b>{NotificationType[notification.type]}:</b> {notification.message}
     </div>
   ));
-  
+
   return <div id="notifications">{notificationsJSX}</div>;
 }
