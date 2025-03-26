@@ -1,0 +1,39 @@
+### Pastel
+#searchResults .card {
+  color: black;
+  border: none;
+  * {
+    border-radius: 1rem;
+    background: inherit;
+  }
+  transition: background 0.2s ease-in-out;
+}
+
+:root {
+  --background: #f2dbbd;
+  --foreground: #99604a;
+}
+
+.card {
+  border: none !important;
+  transition: background 0.2s ease-in-out !important;
+  &:hover .cardButtons {
+    background: inherit !important;
+  }
+}
+
+#searchResults .card:nth-child(5n+1) {
+  background-color: #a8d8ea;
+}
+#searchResults .card:nth-child(5n+2) {
+  background-color: #ffb6b9;
+}
+#searchResults .card:nth-child(5n+3) {
+  background-color: #d4a5a5;
+}
+#searchResults .card:nth-child(5n+4) {
+  background-color: #fbe7c6;
+}
+#searchResults .card:nth-child(5n+5) {
+  background-color: #d5aae6;
+}

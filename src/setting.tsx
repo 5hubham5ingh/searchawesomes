@@ -1,0 +1,168 @@
+import {
+  MutableRef,
+  useCallback,
+  useContext,
+  useRef,
+  useState,
+} from "preact/hooks";
+import { store } from "./utils";
+import { createContext, h, Ref } from "preact";
+import { forwardRef } from "preact/compat";
+
+interface ISettings {
+  openLinksIn: "_blank" | "_self";
+  css: string;
+  visibility: boolean;
+}
+
+interface ISettingsContext {
+  settings: ISettings;
+  updateSettings: (settings: ISettings) => void;
+}
+
+export const SettingsContext = createContext<ISettingsContext>({
+  settings: {
+    openLinksIn: "_blank",
+    css: "",
+    visibility: false,
+  },
+  updateSettings: () => {},
+});
+
+export function SettingsProvider({
+  children,
+}: {
+  children: preact.ComponentChildren;
+}) {
+  let initialSettings;
+  if ((initialSettings = store.get("settings"))) {
+    initialSettings = JSON.parse(initialSettings);
+  } else {
+    initialSettings = {
+      openLinksIn: "_blank",
+      css: "",
+      visibility: false,
+    };
+  }
+  console.log("Initial settings: ", initialSettings);
+  const [settings, setSetting] = useState<ISettings>(initialSettings);
+
+  const injectCss = useCallback((css: string) => {
+    console.log("Injecting css: ");
+    const customStyle = document.createElement("style");
+    customStyle.textContent = css;
+    document.head.appendChild(customStyle);
+  }, []);
+
+  if (settings.css) {
+    injectCss(settings.css);
+  }
+
+  const updateSettings = (newSettings: ISettings) => {
+    console.log("Updaing settings: ", newSettings);
+    setSetting((settings) => {
+      const updatedSettings = { ...settings, ...newSettings };
+      store.set("settings", JSON.stringify(updatedSettings));
+      if (updatedSettings?.css) injectCss(updatedSettings.css);
+      return updatedSettings;
+    });
+  };
+
+  return (
+    <SettingsContext.Provider value={{ settings, updateSettings }}>
+      {children}
+    </SettingsContext.Provider>
+  );
+}
+
+export function useSettings() {
+  const settingsContext = useContext(SettingsContext);
+  return settingsContext;
+}
+
+const OpenLinksIn = forwardRef(
+  (
+    { settings }: { settings: ISettings },
+    ref: MutableRef<typeof settings.openLinksIn>,
+  ) => {
+    const [currentActive, setCurrentActive] = useState(settings.openLinksIn);
+    const onOpenLinksInNewTab = useCallback(() => {
+      ref.current = "_blank";
+      setCurrentActive("_blank");
+    }, []);
+
+    const onOpenLinksInSameTab = useCallback(() => {
+      ref.current = "_self";
+      setCurrentActive("_self");
+    }, []);
+
+    return (
+      <>
+        <button
+          onClick={onOpenLinksInNewTab}
+          style={currentActive === "_blank"
+            ? "background: var(--foreground); color: var(--background)"
+            : ""}
+        >
+          New tab
+        </button>
+        <button
+          onClick={onOpenLinksInSameTab}
+          style={currentActive === "_self"
+            ? "background: var(--foreground); color: var(--background)"
+            : ""}
+        >
+          Same tab
+        </button>
+      </>
+    );
+  },
+);
+
+export function Settings() {
+  const { settings, updateSettings } = useSettings();
+  const openLinksInRef = useRef<typeof settings.openLinksIn>(null);
+  const cssInputRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const handleSubmit = useCallback(() => {
+    const customCss = cssInputRef?.current?.value;
+    const settings: ISettings = {} as ISettings;
+    settings.css = customCss || "";
+
+    if (openLinksInRef.current) {
+      settings.openLinksIn = openLinksInRef.current;
+    }
+
+    settings.visibility = false;
+    updateSettings(settings);
+  }, []);
+
+  const handleClose = () => {
+    updateSettings({ ...settings, visibility: false });
+  };
+
+  if (settings.visibility) {
+    return (
+      <div id="SettingsBackground">
+        <div id="SettingsContainer">
+          <header>
+            <h2>Setting</h2>
+            <div id="SettingsAction">
+              <button onClick={handleSubmit}>save</button>
+              <span>|</span>
+              <button onClick={handleClose}>cancel</button>
+            </div>
+          </header>
+          <section id="OpenLinkSetting">
+            <h3>Open the links in</h3>
+            <OpenLinksIn settings={settings} ref={openLinksInRef} />
+          </section>
+          <section>
+            <h3>Custom CSS</h3>
+            <textarea value={settings.css} ref={cssInputRef} />
+          </section>
+        </div>
+      </div>
+    );
+  }
+}

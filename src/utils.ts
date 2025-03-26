@@ -1,6 +1,6 @@
 import awesomeList from "./awesomeRepoList";
 
-const store = {
+export const store = {
   set: (key: string, value: string) => {
     try {
       localStorage.setItem(key, value);

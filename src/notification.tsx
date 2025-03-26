@@ -8,29 +8,25 @@ export enum NotificationType {
   Log,
 }
 
-// Define the shape of the notification
-interface Notification {
+interface INotification {
   message: string;
   type: NotificationType;
 }
 
-// Define the context type
-interface NotificationContextType {
-  notifications: Notification[];
+interface INotificationContext {
+  notifications: INotification[];
   notify: (message: string, type: NotificationType) => void;
 }
 
-// Create context with a default value that matches the type
-export const NotificationContext = createContext<NotificationContextType>({
+export const NotificationContext = createContext<INotificationContext>({
   notifications: [],
   notify: () => {},
 });
 
-// Provider component
 export function NotificationProvider(
   { children }: { children: preact.ComponentChildren },
 ) {
-  const [queue, setQueue] = useState<Notification[]>([]);
+  const [queue, setQueue] = useState<INotification[]>([]);
 
   const addNotification = (message: string, type: NotificationType) => {
     setQueue((prev) => [...prev, { message, type }]);
@@ -49,12 +45,10 @@ export function NotificationProvider(
   );
 }
 
-// Custom hook for using notifications
 export function useNotification() {
   return useContext(NotificationContext);
 }
 
-// Notification display component
 export function Notification() {
   const { notifications } = useNotification();
 

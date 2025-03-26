@@ -8,7 +8,7 @@ body {
   color: var(--foreground);
   background-color: var(--background);
 
-  #notifications{
+  #notifications {
     position: fixed;
     top: 1rem;
     left: 1rem;
@@ -19,7 +19,7 @@ body {
     display: flex;
     flex-direction: column;
 
-    .notification{
+    .notification {
       background-color: var(--foreground);
       color: var(--background);
       padding: 1rem;
@@ -65,7 +65,7 @@ body {
         height: 1.7rem;
       }
 
-      #openSetting{
+      #openSetting {
         width: 1.5rem;
         height: 1.5rem;
       }
@@ -94,11 +94,10 @@ body {
     }
 
     #search {
-      background-color: rgba(211, 211, 211, 0.518);
+      background-color: var(--foreground);
       width: 60vw;
       display: flex;
       border-radius: 1rem;
-      border: 1px solid black;
       align-items: center;
       justify-content: space-evenly;
 
@@ -109,7 +108,7 @@ body {
         padding: 0.5rem 1rem;
         border-radius: inherit;
         outline: none;
-        border: 1px solid black;
+        border: none;
         color: var(--foreground);
       }
 
@@ -117,10 +116,6 @@ body {
         width: 3rem;
         margin-right: 1rem;
         margin-top: 0.3rem;
-
-        svg {
-          fill: var(--foreground);
-        }
       }
     }
   }
@@ -189,4 +184,91 @@ body {
       }
     }
   }
+
+  #SettingsBackground {
+    height: 100vh;
+    width: 100vw;
+    background-color: transparent;
+    backdrop-filter: blur(10px);
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    #SettingsContainer {
+      min-width: 50vw;
+      min-height: 20vh;
+      max-height: fit-content;
+      max-width: fit-content;
+      background-color: var(--background);
+      color: var(--foreground);
+      position: absolute;
+      border: 0.1rem solid var(--foreground);
+      border-radius: 1rem;
+      padding: 1rem;
+      overflow-y: auto;
+
+      header {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+
+        h2 {
+          margin: 0;
+        }
+
+        span {
+          margin: 0 1rem;
+        }
+
+        button {
+          background: var(--background);
+          border: none;
+          cursor: pointer;
+          color: var(--foreground);
+          padding: 0 1rem;
+          border-radius: 0.5rem;
+        }
+
+        button:hover {
+          background: var(--foreground);
+          color: var(--background);
+        }
+      }
+
+      section {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        h3 {
+          margin-right: auto;
+        }
+
+        button, textarea {
+          margin: 0 0.5rem;
+          background: none;
+          border: 1px solid var(--foreground);
+          height: fit-content;
+          padding: 0.5rem 1rem;
+          border-radius: 10px;
+          outline: none;
+        }
+
+        textarea {
+          min-width: 55%;
+          max-width: 70%;
+          height: 30vh;
+          color: var(--foreground);
+        }
+      }
+    }
+  }
 }
+
