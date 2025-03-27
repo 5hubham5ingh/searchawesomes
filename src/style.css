@@ -152,15 +152,15 @@ body {
         position: absolute;
         top: 0;
         left: 3%;
-        background-color: var(--background);
+        background-color: inherit;
         opacity: 0;
         transition: opacity 0.2s ease-in-out;
         backdrop-filter: blur(50px);
 
-        button, a {
+        button {
           border: none;
           max-height: 50%;
-          background-color: var(--background);
+          background-color: inherit;
           padding: 1rem;
           display: flex;
           align-items: center;
@@ -171,6 +171,7 @@ body {
           font-size: 1rem;
           position: relative;
           overflow: hidden;
+          font-weight: bolder;
         }
 
         button:focus, button:hover {
@@ -271,4 +272,3 @@ body {
     }
   }
 }
-

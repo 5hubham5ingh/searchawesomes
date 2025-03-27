@@ -2,6 +2,8 @@ import {
   MutableRef,
   useCallback,
   useContext,
+  useEffect,
+  useMemo,
   useRef,
   useState,
 } from "preact/hooks";
@@ -29,44 +31,50 @@ export const SettingsContext = createContext<ISettingsContext>({
   updateSettings: () => {},
 });
 
+let initialSettings;
+if ((initialSettings = store.get("settings"))) {
+  initialSettings = JSON.parse(initialSettings);
+} else {
+  initialSettings = {
+    openLinksIn: "_blank",
+    css: "",
+    visibility: false,
+  };
+}
 export function SettingsProvider({
   children,
 }: {
   children: preact.ComponentChildren;
 }) {
-  let initialSettings;
-  if ((initialSettings = store.get("settings"))) {
-    initialSettings = JSON.parse(initialSettings);
-  } else {
-    initialSettings = {
-      openLinksIn: "_blank",
-      css: "",
-      visibility: false,
-    };
-  }
   console.log("Initial settings: ", initialSettings);
   const [settings, setSetting] = useState<ISettings>(initialSettings);
 
   const injectCss = useCallback((css: string) => {
     console.log("Injecting css: ");
-    const customStyle = document.createElement("style");
-    customStyle.textContent = css;
-    document.head.appendChild(customStyle);
+    let customStyle = document.getElementById("userCss");
+    if (!customStyle) {
+      customStyle = document.createElement("style");
+      customStyle.id = "userCss";
+      customStyle.textContent = css;
+      document.head.appendChild(customStyle);
+    } else customStyle.textContent = css;
   }, []);
 
-  if (settings.css) {
+  useEffect(() => {
     injectCss(settings.css);
-  }
+  }, [settings.css]);
 
-  const updateSettings = (newSettings: ISettings) => {
-    console.log("Updaing settings: ", newSettings);
-    setSetting((settings) => {
-      const updatedSettings = { ...settings, ...newSettings };
-      store.set("settings", JSON.stringify(updatedSettings));
-      if (updatedSettings?.css) injectCss(updatedSettings.css);
-      return updatedSettings;
-    });
-  };
+  const updateSettings = useCallback(
+    (newSettings: ISettings) => {
+      console.log("Updaing settings: ", newSettings);
+      setSetting((settings) => {
+        const updatedSettings = { ...settings, ...newSettings };
+        store.set("settings", JSON.stringify(updatedSettings));
+        return updatedSettings;
+      });
+    },
+    [injectCss],
+  );
 
   return (
     <SettingsContext.Provider value={{ settings, updateSettings }}>
@@ -76,8 +84,7 @@ export function SettingsProvider({
 }
 
 export function useSettings() {
-  const settingsContext = useContext(SettingsContext);
-  return settingsContext;
+  return useContext(SettingsContext);
 }
 
 const OpenLinksIn = forwardRef(
@@ -137,9 +144,9 @@ export function Settings() {
     updateSettings(settings);
   }, []);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     updateSettings({ ...settings, visibility: false });
-  };
+  }, [updateSettings]);
 
   if (settings.visibility) {
     return (
