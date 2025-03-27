@@ -1,6 +1,6 @@
 # Search Awesomes
 
-A client-side web application that helps you quickly search through the vast collection of "awesome" GitHub repositories, directly in your browser.
+A web application to quickly search through the vast collection of "awesome" GitHub repositories, directly in your browser.
 
 ## Overview
 
@@ -23,8 +23,8 @@ Fuzzy searching allows you to efficiently find relevant tools and resources, eve
 4.  **Fuzzy Searching:** The application perform fuzzy searches on the parsed data.
 5.  **Result Display:** Search results are displayed in real-time, highlighting matching keywords.
 
-# Custom themes
-## Pastel
+## Custom themes
+### Pastel
 ```css
 :root {
   --background: #f2dbbd;
