@@ -177,6 +177,15 @@ export function Settings() {
             <h3>Custom CSS</h3>
             <textarea value={settings.css} ref={cssInputRef} />
           </section>
+          <section id="shortcuts">
+            <code>Ctrl</code> + <code>s</code> <p> Settings</p>
+            <span>|</span>
+            <code>Ctrl</code> + <code>b</code> <p> Bookmarks</p>
+            <span>|</span>
+            <code>Ctrl</code> + <code>h</code> <p> Homepage</p>
+            <span>|</span>
+            <code>Ctrl</code> + <code>d</code> <p> Dark mode</p>
+          </section>
         </div>
       </div>
     );

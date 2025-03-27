@@ -273,6 +273,34 @@ body {
           color: var(--foreground);
         }
       }
+
+      #shortcuts {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin-top: 1rem;
+
+        code {
+          display: flex;
+          justify-content: center;
+          background: var(--foreground);
+          color: var(--background);
+          padding: 0 0.5rem;
+          font-weight: bolder;
+          margin: 0 0.5rem;
+        }
+
+        span {
+          padding: 0 1rem;
+          font-weight: bolder;
+        }
+
+        p {
+          padding: 0 0.5rem;
+          margin: 0;
+        }
+      }
     }
   }
 }
