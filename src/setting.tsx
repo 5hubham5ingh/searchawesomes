@@ -15,6 +15,7 @@ interface ISettings {
   openLinksIn: "_blank" | "_self";
   css: string;
   visibility: boolean;
+  resultLimit: number;
 }
 
 interface ISettingsContext {
@@ -27,6 +28,7 @@ export const SettingsContext = createContext<ISettingsContext>({
     openLinksIn: "_blank",
     css: "",
     visibility: false,
+    resultLimit: 11,
   },
   updateSettings: () => {},
 });
@@ -39,6 +41,7 @@ if ((initialSettings = store.get("settings"))) {
     openLinksIn: "_blank",
     css: "",
     visibility: false,
+    resultLimit: 11,
   };
 }
 export function SettingsProvider({
@@ -130,12 +133,14 @@ export function Settings() {
   const { settings, updateSettings } = useSettings();
   const openLinksInRef = useRef<typeof settings.openLinksIn>(null);
   const cssInputRef = useRef<HTMLTextAreaElement | null>(null);
+  const resultLimitRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = useCallback(() => {
     const customCss = cssInputRef?.current?.value;
+    const resultLimit = resultLimitRef?.current?.value;
     const settings: ISettings = {} as ISettings;
     settings.css = customCss || "";
-
+    settings.resultLimit = parseInt(resultLimit) || 11;
     if (openLinksInRef.current) {
       settings.openLinksIn = openLinksInRef.current;
     }
@@ -160,6 +165,10 @@ export function Settings() {
               <button onClick={handleClose}>cancel</button>
             </div>
           </header>
+          <section>
+            <h3>Result limit</h3>
+            <input type="number" min="11" max="100" ref={resultLimitRef} value={settings.resultLimit} />
+          </section>
           <section id="OpenLinkSetting">
             <h3>Open the links in</h3>
             <OpenLinksIn settings={settings} ref={openLinksInRef} />

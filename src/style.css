@@ -252,7 +252,7 @@ body {
           margin-right: auto;
         }
 
-        button, textarea {
+        button, textarea, input {
           margin: 0 0.5rem;
           background: none;
           border: 1px solid var(--foreground);
@@ -260,6 +260,10 @@ body {
           padding: 0.5rem 1rem;
           border-radius: 10px;
           outline: none;
+        }
+
+        input {
+          width: 10rem;
         }
 
         textarea {

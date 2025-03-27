@@ -322,6 +322,7 @@ const CardButtons = ({ resource }: { resource: fetchedList & awesomeList }) => {
 
 const SearchResults = () => {
   const { state } = useAppContext();
+  const {settings} = useSettings();
 
   console.log("Initial state...", state);
   const searcher = useMemo(
@@ -333,8 +334,8 @@ const SearchResults = () => {
   );
 
   const filteredResults = useMemo(() => {
-    return searcher.search(state.query)?.slice(0, 11) || [];
-  }, [state.query, state.list]);
+    return searcher.search(state.query)?.slice(0, settings.resultLimit) || [];
+  }, [state.query, state.list, settings.resultLimit]);
 
   console.log("Updating search result...", filteredResults);
   return (
