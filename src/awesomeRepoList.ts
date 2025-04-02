@@ -79,6 +79,21 @@ export default [
       "A curated list of awesome Machine Learning frameworks, libraries and software.",
     parserRegex: /^\*\s+\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)\s+-\s+(.+)$/,
   },
+  {
+    userName: "rust-unofficial",
+    repoName: "awesome-rust",
+    branchName: "main",
+    description: "A curated list of Rust code and resources.",
+    parserRegex: /^\*\s+\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)\s+-\s+([^[]+)/,
+  },
+  {
+    userName: "TaKO8Ki",
+    repoName: "awesome-alternatives-in-rust",
+    branchName: "main",
+    description:
+      "A curated list of replacements for existing software written in Rust ",
+    parserRegex: /^\*\s+\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)\s+-\s+([^[]+)/,
+  },
 ] as {
   userName: string;
   repoName: string;
