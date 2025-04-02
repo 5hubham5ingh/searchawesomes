@@ -39,6 +39,13 @@ export default [
     description: "Awesome lists about all kinds of interesting topics ",
     parserRegex: /^\-\s+\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)\s+-\s+([^([]+)/,
   },
+  {
+    userName: "vinta",
+    repoName: "awesome-python",
+    branchName: "master",
+    description: "Awesome lists about all kinds of interesting topics ",
+    parserRegex: /^\*\s+\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)\s+-\s+(.+)$/,
+  },
 ] as {
   userName: string;
   repoName: string;
