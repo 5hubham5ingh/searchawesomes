@@ -23,6 +23,22 @@ export default [
       "An actively maintained list of awesome MacOs softwares and tools.",
     parserRegex: /\* \[([^\]]+)\]\(([^)]+)\) - (.+?)(?:[ ]+\[|\n|$)/,
   },
+  {
+    userName: "hyprland-community",
+    repoName: "awesome-hyprland",
+    branchName: "main",
+    description:
+      "Awesome list for Hyprland, that includes useful tools and libraries that either work or are designed for Hyprland!",
+    parserRegex:
+      /- \[([^\]]+)\]\(([^)]+)\) (?:!\[[^\]]+\]\[[^\]]+\] )*\(([^)]+)\)/,
+  },
+  {
+    userName: "awesome-selfhosted",
+    repoName: "awesome-selfhosted",
+    branchName: "master",
+    description: "Awesome lists about all kinds of interesting topics ",
+    parserRegex: /^\-\s+\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)\s+-\s+([^([]+)/,
+  },
 ] as {
   userName: string;
   repoName: string;
