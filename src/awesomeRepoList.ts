@@ -36,15 +36,24 @@ export default [
     userName: "awesome-selfhosted",
     repoName: "awesome-selfhosted",
     branchName: "master",
-    description: "Awesome lists about all kinds of interesting topics ",
+    description:
+      "A list of Free Software network services and web applications which can be hosted on your own servers",
     parserRegex: /^\-\s+\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)\s+-\s+([^([]+)/,
   },
   {
     userName: "vinta",
     repoName: "awesome-python",
     branchName: "master",
-    description: "Awesome lists about all kinds of interesting topics ",
+    description:
+      "An opinionated list of awesome Python frameworks, libraries, software and resources.",
     parserRegex: /^\*\s+\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)\s+-\s+(.+)$/,
+  },
+  {
+    userName: "nuxt",
+    repoName: "awesome",
+    branchName: "master",
+    description: "A curated list of awesome things related to Nuxt.js",
+    parserRegex: /^-\s+\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)\s+-\s+(.+)$/,
   },
 ] as {
   userName: string;
