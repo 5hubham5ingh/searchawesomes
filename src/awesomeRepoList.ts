@@ -55,6 +55,14 @@ export default [
     description: "A curated list of awesome things related to Nuxt.js",
     parserRegex: /^-\s+\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)\s+-\s+(.+)$/,
   },
+  {
+    userName: "avelino",
+    repoName: "awesome-go",
+    branchName: "main",
+    description:
+      "A curated list of awesome Go frameworks, libraries and software",
+    parserRegex: /^-\s+\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)\s+-\s+(.+)$/,
+  },
 ] as {
   userName: string;
   repoName: string;
