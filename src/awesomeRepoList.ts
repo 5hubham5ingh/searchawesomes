@@ -63,6 +63,22 @@ export default [
       "A curated list of awesome Go frameworks, libraries and software",
     parserRegex: /^-\s+\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)\s+-\s+(.+)$/,
   },
+  {
+    userName: "akullpp",
+    repoName: "awesome-java",
+    branchName: "master",
+    description:
+      "A curated list of awesome frameworks, libraries and software for the Java programming language. ",
+    parserRegex: /^-\s+\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)\s+-\s+(.+)$/,
+  },
+  {
+    userName: "josephmisiti",
+    repoName: "awesome-machine-learning",
+    branchName: "master",
+    description:
+      "A curated list of awesome Machine Learning frameworks, libraries and software.",
+    parserRegex: /^\*\s+\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)\s+-\s+(.+)$/,
+  },
 ] as {
   userName: string;
   repoName: string;
